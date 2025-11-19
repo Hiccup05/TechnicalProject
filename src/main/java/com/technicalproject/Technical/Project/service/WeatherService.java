@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
+
 @RequiredArgsConstructor
 @Service
 @Slf4j
@@ -27,7 +29,7 @@ public class WeatherService {
 
     private final String CITY="Pokhara";
 
-    public Weather getWeather() throws JsonProcessingException {
+    public Weather getWeather() throws RuntimeException {
         Weather weather = redisService.getFromRedis(CITY, Weather.class);
         if(weather!=null) {
             return weather;
@@ -36,7 +38,7 @@ public class WeatherService {
         log.info("Hitting the final url {}",finalUrl);
         ResponseEntity<Weather> weatherResponse = restTemplate.exchange(finalUrl, HttpMethod.GET, null, Weather.class);
         weather= weatherResponse.getBody();
-        redisService.setInRedis(CITY,Weather.class, 5);
+        redisService.setInRedis(CITY,weather, 5);
         return weather;
     }
 }

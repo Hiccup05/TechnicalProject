@@ -30,7 +30,7 @@ public class EmailTest {
         emailService.formatMessage("Nothing to show here");
     }
 
-    @Disabled
+
     @Test
     public void weatherInfoSenderCheck(){
         emailService.broadCastWeatherInfo("Uhmm");

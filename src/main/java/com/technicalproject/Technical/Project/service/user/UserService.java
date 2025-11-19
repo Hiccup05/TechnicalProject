@@ -8,6 +8,7 @@ import com.technicalproject.Technical.Project.exception.ResourceAlreadyFound;
 import com.technicalproject.Technical.Project.exception.ResourceNotFoundException;
 import com.technicalproject.Technical.Project.model.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService implements IUserService{
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
     @Override
     public void createUser(SignUpRequest request) {
        userRepository.findByUserName(request.getUserName())
@@ -26,7 +29,7 @@ public class UserService implements IUserService{
                    user.setFirstName(request.getFirstName());
                    user.setLastName(request.getLastName());
                    user.setUserName(request.getUserName());
-                   user.setPassword(request.getPassword());
+                   user.setPassword(passwordEncoder.encode(request.getPassword()));
                    userRepository.save(user);
                });
     }

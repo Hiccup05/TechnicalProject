@@ -28,6 +28,9 @@ spring:
           auth: true
           starttls:
             enable: true
+  redis:
+    port: 6379
+    host: localhost
 
 WAPI: "https://api.weatherstack.com/current?access_key=KEY&query=location"
 

@@ -3,6 +3,7 @@ package com.technicalproject.Technical.Project.controller;
 import com.technicalproject.Technical.Project.Response.ApiResponse;
 import com.technicalproject.Technical.Project.service.email.EmailService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("${api.prefix}/feature")
@@ -42,7 +44,8 @@ public class FeatureController {
             emailService.broadCastWeatherInfo(message);
             return ResponseEntity.ok(new ApiResponse("Message send successfully", null));
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiResponse("Due to some reason, message couldnt be send.", e));
+            log.error("{}{}",e.getMessage(),e.getStackTrace());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiResponse("Due to some reason, message couldnt be send.", e.getMessage()));
         }
     }
 

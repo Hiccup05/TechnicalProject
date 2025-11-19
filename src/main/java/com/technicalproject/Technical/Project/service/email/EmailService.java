@@ -33,13 +33,14 @@ public class EmailService {
             mailMessage.setText(message);
             mailMessage.setSubject(topic);
             mailSender.send(mailMessage);
+            logger.info(String.valueOf(mailMessage));
         } catch (MailException e) {
-            logger.warn("Error occured while sending email to {}", receiver);
+            logger.warn("Error occurred while sending email to {}", receiver);
             throw new RuntimeException(e);
         }
     }
 
-    public void broadCastEmail(String message,String topic) throws JsonProcessingException {
+    public void broadCastEmail(String message,String topic) throws RuntimeException {
         List<String> users = redisService.getFromRedis("users", List.class);
         if(users!=null){
             for(String user: users){
@@ -56,28 +57,17 @@ public class EmailService {
         }
     }
 
-    public void broadCastWeatherInfo(String message) throws JsonProcessingException {
+    public void broadCastWeatherInfo(String message) throws RuntimeException {
         String topic="Weather Information";
-        String formattedMessage;
-        if(message.isBlank()){
-            formattedMessage=formatMessage();
-        }else{
-            formattedMessage=formatMessage(message);
-        }
+        String formattedMessage=formatMessage(message);
         broadCastEmail(formattedMessage, topic);
     }
 
-    public String formatMessage(String message) throws JsonProcessingException {
+    public String formatMessage(String message) throws RuntimeException {
         Weather weather=weatherService.getWeather();
         return message+" \n"+"Weather Information\n Temperature:"+weather.getCurrent().getTemperature()
                 +"\n Weather code:"+weather.getCurrent().getWeatherCode()
                 +"\n Observation time:"+weather.getCurrent().getObservationTime();
     }
 
-    public String formatMessage() throws JsonProcessingException {
-        Weather weather=weatherService.getWeather();
-        return "Weather Information"+"\n Temperature:"+weather.getCurrent().getTemperature()
-                +"\n Weather code:"+weather.getCurrent().getWeatherCode()
-                +"\n Observation time:"+weather.getCurrent().getObservationTime();
-    }
 }

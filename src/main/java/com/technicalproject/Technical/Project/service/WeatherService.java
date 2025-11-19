@@ -1,6 +1,8 @@
 package com.technicalproject.Technical.Project.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.technicalproject.Technical.Project.model.Weather;
+import com.technicalproject.Technical.Project.service.redis.RedisService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 public class WeatherService {
     private final RestTemplate restTemplate;
+    private final RedisService redisService;
 
     @Value("${WAPI}")
     private String url;
@@ -22,10 +25,18 @@ public class WeatherService {
     @Value("${KEY}")
     private String key;
 
-    public Weather getWeather(){
-        String finalUrl=url.replace("KEY",key).replace("location","pokhara");
+    private final String CITY="Pokhara";
+
+    public Weather getWeather() throws JsonProcessingException {
+        Weather weather = redisService.getFromRedis(CITY, Weather.class);
+        if(weather!=null) {
+            return weather;
+        }
+        String finalUrl=url.replace("KEY",key).replace("location",CITY);
         log.info("Hitting the final url {}",finalUrl);
-        ResponseEntity<Weather> weather = restTemplate.exchange(finalUrl, HttpMethod.GET, null, Weather.class);
-        return weather.getBody();
+        ResponseEntity<Weather> weatherResponse = restTemplate.exchange(finalUrl, HttpMethod.GET, null, Weather.class);
+        weather= weatherResponse.getBody();
+        redisService.setInRedis(CITY,Weather.class, 5);
+        return weather;
     }
 }

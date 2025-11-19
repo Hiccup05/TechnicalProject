@@ -17,6 +17,20 @@ spring:
       hibernate:
         format_sql: true
         auto_index_ddl: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: 2crewmember10@gmail.com
+    password: yktj ipmw qbtg swnp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+WAPI: "https://api.weatherstack.com/current?access_key=KEY&query=location"
+
 
 api.prefix: /api/v1
 

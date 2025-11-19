@@ -10,7 +10,7 @@ import com.technicalproject.Technical.Project.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +34,11 @@ public class UserService implements IUserService{
     @Override
     public User getUser(Long id) {
         return userRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("User nor found"));
+    }
+
+    @Override
+    public List<User> getUsers(){
+        return userRepository.findAll();
     }
 
     @Override

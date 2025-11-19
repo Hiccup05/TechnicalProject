@@ -6,7 +6,7 @@ import com.technicalproject.Technical.Project.Response.ApiResponse;
 import com.technicalproject.Technical.Project.Response.SignUpResponse;
 import com.technicalproject.Technical.Project.model.User;
 import com.technicalproject.Technical.Project.service.user.UserService;
-import lombok.Getter;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
 
-    @RequestMapping("/sign_in")
-    public ResponseEntity<SignUpResponse> signin(@RequestBody SignUpRequest request){
+    @PostMapping("/sign_in")
+    public ResponseEntity<SignUpResponse> signin(@RequestBody @Valid SignUpRequest request){
         try{
             userService.createUser(request);
             return ResponseEntity.ok(new SignUpResponse("Successful Sign up","Proceed to Login"));
@@ -46,7 +46,7 @@ public class UserController {
             userService.updateUser(userId, request);
             return ResponseEntity.ok(new ApiResponse("User updated successfully. Hit view api to see changes",null));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiResponse(e.getMessage(),null));
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiResponse("please dont leave email or password empty",e));
         }
     }
 

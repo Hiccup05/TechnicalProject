@@ -42,13 +42,19 @@ public class JwtUtil {
 
     public boolean validateToken(String token){
         try{
+            System.out.println(Jwts.parser()
+                    .verifyWith(key())
+                    .build()
+                    .parseSignedClaims(token));
             Jwts.parser()
                     .verifyWith(key())
                     .build()
                     .parseSignedClaims(token);
+
             return true;
         }
         catch (Exception e){
+            System.out.println(e.getMessage());
             throw new JwtException(e.getMessage());
         }
     }

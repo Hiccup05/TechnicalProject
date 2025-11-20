@@ -9,8 +9,8 @@ import com.technicalproject.Technical.Project.service.auth.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,7 +21,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse> login(LoginRequestDto requestDto){
+    public ResponseEntity<ApiResponse> login(@RequestBody LoginRequestDto requestDto){
         try{
             LoginResponseDto loginResponseDto = authService.logIn(requestDto);
             return ResponseEntity.ok(new ApiResponse(null,loginResponseDto));
@@ -32,7 +32,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<ApiResponse> signIn(SignUpRequest request){
+    public ResponseEntity<ApiResponse> signIn(@RequestBody SignUpRequest request){
         try{
             authService.createUser(request);
             return ResponseEntity.ok(new ApiResponse(null,new SignUpResponse("Sign up successful", "You may proceed to login")));

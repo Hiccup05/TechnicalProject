@@ -31,7 +31,6 @@ public class EntryPointTest {
     @Autowired
     private AuthService authService;
 
-    @Disabled
     @Test
     void testSignIn(){
         SignUpRequest request=new SignUpRequest("Hiccup","Viking","viking@gmail.com","hiccup123");
@@ -39,6 +38,7 @@ public class EntryPointTest {
 
     }
 
+    @Disabled
     @Test
     void testLogIn(){
         LoginRequestDto loginRequestDto=new LoginRequestDto();

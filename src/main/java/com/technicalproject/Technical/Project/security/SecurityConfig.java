@@ -25,19 +25,17 @@ public class SecurityConfig {
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
     private final JwtFilter jwtFilter;
-
+    private static final String P_URL="/api/v1/auth/**";
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("${api.prefix}/auth/**").permitAll()
+                        auth.requestMatchers(P_URL).permitAll()
                                 .anyRequest().authenticated()
                 ).sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(Customizer.withDefaults()).build();
     }
-
-
 }

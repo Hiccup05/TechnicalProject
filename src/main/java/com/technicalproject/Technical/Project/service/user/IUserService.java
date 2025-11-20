@@ -7,7 +7,6 @@ import com.technicalproject.Technical.Project.model.User;
 import java.util.List;
 
 public interface IUserService {
-    void createUser(SignUpRequest request);
 
     User getUser(Long id);
 

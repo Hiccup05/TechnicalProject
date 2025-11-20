@@ -19,20 +19,6 @@ public class UserService implements IUserService{
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Override
-    public void createUser(SignUpRequest request) {
-       userRepository.findByUserName(request.getUserName())
-               .ifPresentOrElse(user ->
-                       {throw new ResourceAlreadyFound("User from this email already exists.");},
-               ()->{
-                   User user=new User();
-                   user.setFirstName(request.getFirstName());
-                   user.setLastName(request.getLastName());
-                   user.setUserName(request.getUserName());
-                   user.setPassword(passwordEncoder.encode(request.getPassword()));
-                   userRepository.save(user);
-               });
-    }
 
     @Override
     public User getUser(Long id) {

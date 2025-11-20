@@ -18,17 +18,6 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
 
-    @PostMapping("/sign_in")
-    public ResponseEntity<SignUpResponse> signin(@RequestBody @Valid SignUpRequest request){
-        try{
-            userService.createUser(request);
-            return ResponseEntity.ok(new SignUpResponse("Successful Sign up","Proceed to Login"));
-        }
-        catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(new SignUpResponse(e.getMessage(),"Try to sign up with different username"));
-        }
-    }
-
     @GetMapping("/user/{userId}")
     public ResponseEntity<ApiResponse> fetchUser(@PathVariable Long userId){
         try{
